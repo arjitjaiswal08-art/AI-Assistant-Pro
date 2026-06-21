@@ -3,9 +3,16 @@ from groq import Groq
 import fitz  # pymupdf
 from sentence_transformers import SentenceTransformer
 from datetime import datetime
+import base64
+from PIL import Image
+import io
 
 # ---- SETUP ----
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
+
+def encode_image_to_base64(image_file):
+    """Convert image to base64 string"""
+    return base64.b64encode(image_file.read()).decode('utf-8')
 
 def load_pdf(file):
     """Extract text from uploaded PDF"""
@@ -78,6 +85,12 @@ if "pdf_chunks" not in st.session_state:
 
 if "pdf_embeddings" not in st.session_state:
     st.session_state.pdf_embeddings = None
+
+if "uploaded_image" not in st.session_state:
+    st.session_state.uploaded_image = None
+
+if "image_base64" not in st.session_state:
+    st.session_state.image_base64 = None
 
 # Custom CSS with Watermark
 st.markdown("""
@@ -193,6 +206,35 @@ with st.sidebar:
 
     st.divider()
     
+    # Image Upload Feature
+    st.header("📸 Upload Image")
+    st.caption("Ask questions about images")
+    
+    image_file = st.file_uploader(
+        "Choose from Camera or Gallery", 
+        type=["jpg", "jpeg", "png", "webp"],
+        help="Upload an image to ask questions about it"
+    )
+    
+    if image_file:
+        # Display the uploaded image
+        image = Image.open(image_file)
+        st.image(image, caption="Uploaded Image", use_container_width=True)
+        
+        # Store image in session state
+        image_file.seek(0)  # Reset file pointer
+        st.session_state.uploaded_image = image
+        st.session_state.image_base64 = encode_image_to_base64(image_file)
+        st.success("✅ Image uploaded! Ask questions about it.")
+        
+        # Clear image button
+        if st.button("🗑️ Clear Image", use_container_width=True):
+            st.session_state.uploaded_image = None
+            st.session_state.image_base64 = None
+            st.rerun()
+    
+    st.divider()
+    
     # Stats
     if st.session_state.messages:
         st.markdown("### 📊 Chat Stats")
@@ -221,8 +263,38 @@ if user_input := st.chat_input("Ask me anything..."):
         try:
             groq_client = Groq(api_key=api_key)
 
+            # Check if there's an uploaded image - use vision model
+            if st.session_state.image_base64:
+                # Use vision-capable model
+                vision_model = "llama-3.2-90b-vision-preview"
+                
+                messages_to_send = [
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": user_input
+                            },
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/jpeg;base64,{st.session_state.image_base64}"
+                                }
+                            }
+                        ]
+                    }
+                ]
+                
+                stream = groq_client.chat.completions.create(
+                    model=vision_model,
+                    messages=messages_to_send,
+                    stream=True,
+                    max_tokens=1024
+                )
+            
             # If a PDF was uploaded, find relevant chunks
-            if st.session_state.pdf_chunks and st.session_state.pdf_embeddings is not None:
+            elif st.session_state.pdf_chunks and st.session_state.pdf_embeddings is not None:
                 query_embedding = embedder.encode([user_input])
                 import numpy as np
                 scores = np.dot(st.session_state.pdf_embeddings, query_embedding.T).flatten()
@@ -240,15 +312,21 @@ Question: {user_input}"""
                 messages_to_send = [{"role": "system", "content": system_prompt}] + \
                                    st.session_state.messages[:-1] + \
                                    [{"role": "user", "content": rag_prompt}]
+                
+                stream = groq_client.chat.completions.create(
+                    model=selected_model,
+                    messages=messages_to_send,
+                    stream=True
+                )
             else:
                 messages_to_send = [{"role": "system", "content": system_prompt}] + \
                                    st.session_state.messages
-
-            stream = groq_client.chat.completions.create(
-                model=selected_model,
-                messages=messages_to_send,
-                stream=True
-            )
+                
+                stream = groq_client.chat.completions.create(
+                    model=selected_model,
+                    messages=messages_to_send,
+                    stream=True
+                )
 
             for chunk in stream:
                 if chunk.choices[0].delta.content:
