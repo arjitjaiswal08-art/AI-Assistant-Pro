@@ -362,16 +362,27 @@ with st.sidebar:
     st.divider()
     
     # API Key Input (users can enter their own key)
+    st.markdown('<h3 style="color: #0f172a; font-weight: 700;">🔑 API Key</h3>', unsafe_allow_html=True)
+    
     api_key = st.text_input(
         "Groq API Key",
         type="password",
         help="Get your free API key from console.groq.com",
-        value=st.secrets.get("GROQ_API_KEY", "") if hasattr(st, "secrets") else ""
+        value="",
+        placeholder="Enter your Groq API key here..."
     )
     
     if not api_key:
-        st.warning("⚠️ Please enter your Groq API key")
-        st.info("🔑 Get free key at [console.groq.com](https://console.groq.com/)")
+        st.error("⚠️ API Key Required")
+        st.info("Get your FREE API key:")
+        st.markdown("1. Go to [console.groq.com](https://console.groq.com/)")
+        st.markdown("2. Sign up or login")
+        st.markdown("3. Click 'API Keys' → 'Create API Key'")
+        st.markdown("4. Copy and paste the key above")
+    elif not api_key.startswith("gsk_"):
+        st.warning("⚠️ Invalid API key format. Groq keys start with 'gsk_'")
+    else:
+        st.success("✅ API Key configured")
 
     models = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"]
     selected_model = st.selectbox("Choose AI Model", models)
