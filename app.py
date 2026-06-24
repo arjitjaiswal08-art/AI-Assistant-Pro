@@ -154,6 +154,30 @@ st.markdown(f"""
         border-right: 1px solid rgba(255, 255, 255, 0.3);
     }}
     
+    /* Sidebar Text - Make it Darker and More Visible */
+    [data-testid="stSidebar"] * {{
+        color: #1a202c !important;
+    }}
+    
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] h4,
+    [data-testid="stSidebar"] h5 {{
+        color: #0f172a !important;
+        font-weight: 700 !important;
+    }}
+    
+    [data-testid="stSidebar"] label {{
+        color: #1a202c !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+    }}
+    
+    [data-testid="stSidebar"] .stMarkdown {{
+        color: #1a202c !important;
+    }}
+    
     /* Main Content Area */
     .main .block-container {{
         padding-top: 2rem;
@@ -314,7 +338,8 @@ with st.expander("ℹ️ Fair Use Policy"):
 
 # ---- SIDEBAR ----
 with st.sidebar:
-    st.header("⚙️ Settings")
+    # Main Settings Header with better styling
+    st.markdown('<h2 style="color: #0f172a; font-weight: 800; margin-bottom: 1.5rem;">⚙️ Settings</h2>', unsafe_allow_html=True)
     
     # Theme Selector at the top
     st.markdown("### 🎨 Theme")
@@ -386,8 +411,8 @@ with st.sidebar:
     
     st.divider()
     
-    # Voice Input Feature
-    st.header("🎤 Voice Input")
+    # Voice Input Feature with better visibility
+    st.markdown('<h3 style="color: #0f172a; font-weight: 700;">🎤 Voice Input</h3>', unsafe_allow_html=True)
     st.caption("Speak to ask questions")
     
     col_voice1, col_voice2 = st.columns([2, 1])
@@ -400,7 +425,7 @@ with st.sidebar:
     
     st.divider()
     
-    st.header("📄 Upload Document")
+    st.markdown('<h3 style="color: #0f172a; font-weight: 700;">📄 Upload Document</h3>', unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Upload a PDF", type=["pdf"])
 
     if uploaded_file:
@@ -412,8 +437,8 @@ with st.sidebar:
 
     st.divider()
     
-    # Image Upload Feature
-    st.header("📸 Upload Image")
+    # Image Upload Feature with better visibility
+    st.markdown('<h3 style="color: #0f172a; font-weight: 700;">📸 Upload Image</h3>', unsafe_allow_html=True)
     st.caption("Ask questions about images")
     
     image_file = st.file_uploader(
