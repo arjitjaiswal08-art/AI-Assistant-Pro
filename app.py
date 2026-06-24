@@ -92,20 +92,60 @@ if "uploaded_image" not in st.session_state:
 if "image_base64" not in st.session_state:
     st.session_state.image_base64 = None
 
-# Custom CSS - Professional Design
-st.markdown("""
+if "theme" not in st.session_state:
+    st.session_state.theme = "Purple Gradient"
+
+# Theme Definitions
+THEMES = {
+    "Purple Gradient": {
+        "bg": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        "primary": "#667eea",
+        "name": "🟣 Purple Gradient"
+    },
+    "Ocean Blue": {
+        "bg": "linear-gradient(135deg, #0093E9 0%, #80D0C7 100%)",
+        "primary": "#0093E9",
+        "name": "🌊 Ocean Blue"
+    },
+    "Sunset Orange": {
+        "bg": "linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 50%, #2BFF88 100%)",
+        "primary": "#FA8BFF",
+        "name": "🌅 Sunset"
+    },
+    "Forest Green": {
+        "bg": "linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%)",
+        "primary": "#2C5364",
+        "name": "🌲 Forest"
+    },
+    "Dark Mode": {
+        "bg": "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
+        "primary": "#4a90e2",
+        "name": "🌙 Dark Mode"
+    },
+    "Light Mode": {
+        "bg": "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+        "primary": "#667eea",
+        "name": "☀️ Light Mode"
+    }
+}
+
+# Custom CSS - Professional Design with Dynamic Theme
+current_theme = THEMES[st.session_state.theme]
+
+st.markdown(f"""
     <style>
     /* Import Professional Font */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
-    * {
+    * {{
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
+    }}
     
-    /* Clean Background */
-    .stApp {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
+    /* Dynamic Theme Background */
+    .stApp {{
+        background: {current_theme['bg']};
+        transition: all 0.3s ease;
+    }}
     
     /* Glassmorphism Sidebar */
     [data-testid="stSidebar"] {
@@ -158,11 +198,11 @@ st.markdown("""
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
     
-    /* Primary Button */
-    .stButton button[kind="primary"] {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Primary Button with Theme Color */
+    .stButton button[kind="primary"] {{
+        background: linear-gradient(135deg, {current_theme['primary']} 0%, {current_theme['primary']}dd 100%);
         color: white;
-    }
+    }}
     
     /* File Uploader */
     [data-testid="stFileUploader"] {
@@ -185,10 +225,11 @@ st.markdown("""
         padding: 0.75rem;
     }
     
-    .stTextInput input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
+    /* Text Input with Theme Color */
+    .stTextInput input:focus {{
+        border-color: {current_theme['primary']};
+        box-shadow: 0 0 0 3px {current_theme['primary']}20;
+    }}
     
     /* Select Box */
     .stSelectbox > div > div {
@@ -275,13 +316,37 @@ with st.expander("ℹ️ Fair Use Policy"):
 with st.sidebar:
     st.header("⚙️ Settings")
     
-    # Use API key from secrets only (hidden from users)
-    if hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
-        api_key = st.secrets["GROQ_API_KEY"]
-        st.success("✅ Connected to Groq AI")
-    else:
-        st.error("⚠️ API key not configured")
-        st.stop()
+    # Theme Selector at the top
+    st.markdown("### 🎨 Theme")
+    theme_options = list(THEMES.keys())
+    theme_names = [THEMES[t]["name"] for t in theme_options]
+    
+    selected_theme_name = st.selectbox(
+        "Choose Theme",
+        theme_names,
+        index=theme_options.index(st.session_state.theme),
+        label_visibility="collapsed"
+    )
+    
+    # Update theme if changed
+    selected_theme = theme_options[theme_names.index(selected_theme_name)]
+    if selected_theme != st.session_state.theme:
+        st.session_state.theme = selected_theme
+        st.rerun()
+    
+    st.divider()
+    
+    # API Key Input (users can enter their own key)
+    api_key = st.text_input(
+        "Groq API Key",
+        type="password",
+        help="Get your free API key from console.groq.com",
+        value=st.secrets.get("GROQ_API_KEY", "") if hasattr(st, "secrets") else ""
+    )
+    
+    if not api_key:
+        st.warning("⚠️ Please enter your Groq API key")
+        st.info("🔑 Get free key at [console.groq.com](https://console.groq.com/)")
 
     models = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"]
     selected_model = st.selectbox("Choose AI Model", models)
