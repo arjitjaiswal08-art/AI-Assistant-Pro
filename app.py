@@ -163,32 +163,21 @@ st.markdown("""
 st.title("🤖 AI Assistant Pro")
 st.caption("☁️ Cloud Edition • Powered by Groq")
 
-# Usage Notice
-with st.expander("ℹ️ Fair Use Policy"):
-    st.markdown("""
-    **Rate Limits:**
-    - 5 messages per minute per user
-    - This protects the service for everyone
-    
-    **Guidelines:**
-    - Use for legitimate purposes only
-    - Be respectful and avoid spam
-    - Large files may take longer to process
-    
-    Thank you for using AI Assistant Pro responsibly! 🙏
-    """)
-
 # ---- SIDEBAR ----
 with st.sidebar:
     st.header("⚙️ Settings")
     
-    # Use API key from secrets only (hidden from users)
-    if hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
-        api_key = st.secrets["GROQ_API_KEY"]
-        st.success("✅ Connected to Groq AI")
-    else:
-        st.error("⚠️ API key not configured")
-        st.stop()
+    # API Key Input (users can enter their own key)
+    api_key = st.text_input(
+        "Groq API Key",
+        type="password",
+        help="Get your free API key from console.groq.com",
+        value=st.secrets.get("GROQ_API_KEY", "") if hasattr(st, "secrets") else ""
+    )
+    
+    if not api_key:
+        st.warning("⚠️ Please enter your Groq API key to use the chatbot")
+        st.info("🔑 Get a free API key at [console.groq.com](https://console.groq.com/)")
 
     models = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"]
     selected_model = st.selectbox("Choose AI Model", models)
@@ -282,6 +271,10 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 if user_input := st.chat_input("Ask me anything..."):
+    if not api_key:
+        st.error("Please enter your Groq API key in the sidebar")
+        st.stop()
+    
     # Check rate limit
     if not check_rate_limit():
         st.error(f"⏳ Rate limit reached. Please wait a minute before sending more messages.")
