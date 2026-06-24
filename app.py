@@ -92,10 +92,132 @@ if "uploaded_image" not in st.session_state:
 if "image_base64" not in st.session_state:
     st.session_state.image_base64 = None
 
-# Custom CSS
+# Custom CSS - Professional Design
 st.markdown("""
     <style>
-    /* Hide default Streamlit elements */
+    /* Import Professional Font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    /* Clean Background */
+    .stApp {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    /* Glassmorphism Sidebar */
+    [data-testid="stSidebar"] {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    /* Main Content Area */
+    .main .block-container {
+        padding-top: 2rem;
+        max-width: 1200px;
+    }
+    
+    /* Professional Headers */
+    h1, h2, h3 {
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    
+    /* Chat Messages */
+    .stChatMessage {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    /* Input Box */
+    .stChatInputContainer {
+        background: white;
+        border-radius: 16px;
+        padding: 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    /* Buttons */
+    .stButton button {
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.2s ease;
+        border: none;
+    }
+    
+    .stButton button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    /* Primary Button */
+    .stButton button[kind="primary"] {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    /* File Uploader */
+    [data-testid="stFileUploader"] {
+        background: rgba(102, 126, 234, 0.05);
+        border: 2px dashed rgba(102, 126, 234, 0.3);
+        border-radius: 12px;
+        padding: 2rem 1rem;
+    }
+    
+    /* Success/Info/Warning Messages */
+    .stAlert {
+        border-radius: 12px;
+        border-left: 4px solid;
+    }
+    
+    /* Text Input */
+    .stTextInput input {
+        border-radius: 10px;
+        border: 2px solid #e2e8f0;
+        padding: 0.75rem;
+    }
+    
+    .stTextInput input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    /* Select Box */
+    .stSelectbox > div > div {
+        border-radius: 10px;
+        border: 2px solid #e2e8f0;
+    }
+    
+    /* Text Area */
+    .stTextArea textarea {
+        border-radius: 10px;
+        border: 2px solid #e2e8f0;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        border-radius: 10px;
+        background: rgba(102, 126, 234, 0.05);
+        font-weight: 600;
+    }
+    
+    /* Metrics */
+    [data-testid="stMetric"] {
+        background: white;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    /* Hide Streamlit Branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
@@ -104,6 +226,35 @@ st.markdown("""
 
 st.title("🤖 AI Assistant Pro")
 st.caption("☁️ Cloud Edition • Powered by Groq")
+
+# Professional Hero Section
+st.markdown("""
+    <div style="background: white; padding: 2rem; border-radius: 16px; margin-bottom: 2rem; 
+                box-shadow: 0 4px 16px rgba(0,0,0,0.08);">
+        <h2 style="margin: 0 0 0.5rem 0; color: #1a202c;">Welcome to AI Assistant Pro</h2>
+        <p style="margin: 0; color: #64748b; font-size: 1.1rem;">
+            Multi-modal AI platform with document intelligence and vision capabilities
+        </p>
+        <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <span style="background: #f0f9ff; color: #0369a1; padding: 0.5rem 1rem; 
+                         border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
+                💬 Text Chat
+            </span>
+            <span style="background: #f0fdf4; color: #15803d; padding: 0.5rem 1rem; 
+                         border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
+                📄 PDF Analysis
+            </span>
+            <span style="background: #fef3c7; color: #92400e; padding: 0.5rem 1rem; 
+                         border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
+                📸 Image Vision
+            </span>
+            <span style="background: #fce7f3; color: #9f1239; padding: 0.5rem 1rem; 
+                         border-radius: 20px; font-size: 0.9rem; font-weight: 600;">
+                🎤 Voice Ready
+            </span>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 
 # Usage Notice
 with st.expander("ℹ️ Fair Use Policy"):
