@@ -148,55 +148,55 @@ st.markdown(f"""
     }}
     
     /* Glassmorphism Sidebar */
-    [data-testid="stSidebar"] {
+    [data-testid="stSidebar"] {{
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(20px);
         border-right: 1px solid rgba(255, 255, 255, 0.3);
-    }
+    }}
     
     /* Main Content Area */
-    .main .block-container {
+    .main .block-container {{
         padding-top: 2rem;
         max-width: 1200px;
-    }
+    }}
     
     /* Professional Headers */
-    h1, h2, h3 {
+    h1, h2, h3 {{
         font-weight: 700;
         letter-spacing: -0.5px;
-    }
+    }}
     
     /* Chat Messages */
-    .stChatMessage {
+    .stChatMessage {{
         background: white;
         border-radius: 16px;
         padding: 1.5rem;
         margin: 1rem 0;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         border: 1px solid rgba(0,0,0,0.05);
-    }
+    }}
     
     /* Input Box */
-    .stChatInputContainer {
+    .stChatInputContainer {{
         background: white;
         border-radius: 16px;
         padding: 1rem;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
+    }}
     
     /* Buttons */
-    .stButton button {
+    .stButton button {{
         border-radius: 10px;
         font-weight: 600;
         padding: 0.6rem 1.5rem;
         transition: all 0.2s ease;
         border: none;
-    }
+    }}
     
-    .stButton button:hover {
+    .stButton button:hover {{
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
+    }}
     
     /* Primary Button with Theme Color */
     .stButton button[kind="primary"] {{
@@ -205,25 +205,25 @@ st.markdown(f"""
     }}
     
     /* File Uploader */
-    [data-testid="stFileUploader"] {
+    [data-testid="stFileUploader"] {{
         background: rgba(102, 126, 234, 0.05);
         border: 2px dashed rgba(102, 126, 234, 0.3);
         border-radius: 12px;
         padding: 2rem 1rem;
-    }
+    }}
     
     /* Success/Info/Warning Messages */
-    .stAlert {
+    .stAlert {{
         border-radius: 12px;
         border-left: 4px solid;
-    }
+    }}
     
     /* Text Input */
-    .stTextInput input {
+    .stTextInput input {{
         border-radius: 10px;
         border: 2px solid #e2e8f0;
         padding: 0.75rem;
-    }
+    }}
     
     /* Text Input with Theme Color */
     .stTextInput input:focus {{
@@ -232,36 +232,36 @@ st.markdown(f"""
     }}
     
     /* Select Box */
-    .stSelectbox > div > div {
+    .stSelectbox > div > div {{
         border-radius: 10px;
         border: 2px solid #e2e8f0;
-    }
+    }}
     
     /* Text Area */
-    .stTextArea textarea {
+    .stTextArea textarea {{
         border-radius: 10px;
         border: 2px solid #e2e8f0;
-    }
+    }}
     
     /* Expander */
-    .streamlit-expanderHeader {
+    .streamlit-expanderHeader {{
         border-radius: 10px;
         background: rgba(102, 126, 234, 0.05);
         font-weight: 600;
-    }
+    }}
     
     /* Metrics */
-    [data-testid="stMetric"] {
+    [data-testid="stMetric"] {{
         background: white;
         padding: 1rem;
         border-radius: 10px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
+    }}
     
     /* Hide Streamlit Branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
+    #MainMenu {{visibility: hidden;}}
+    footer {{visibility: hidden;}}
+    header {{visibility: hidden;}}
     </style>
 """, unsafe_allow_html=True)
 
