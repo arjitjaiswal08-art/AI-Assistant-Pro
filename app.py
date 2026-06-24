@@ -92,49 +92,14 @@ if "uploaded_image" not in st.session_state:
 if "image_base64" not in st.session_state:
     st.session_state.image_base64 = None
 
-# Custom CSS with Watermark
+# Custom CSS
 st.markdown("""
     <style>
-    /* Watermark Badge */
-    .watermark {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: white;
-        padding: 10px 20px;
-        border-radius: 50px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        border: 1px solid #e2e8f0;
-        font-size: 13px;
-        font-weight: 600;
-        color: #0f172a;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
-    }
-    
-    .watermark:hover {
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        transform: translateY(-2px);
-    }
-    
-    .watermark-icon {
-        font-size: 16px;
-        animation: sparkle 2s ease-in-out infinite;
-    }
-    
-    @keyframes sparkle {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.7; transform: scale(1.1); }
-    }
+    /* Hide default Streamlit elements */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
     </style>
-    
-    <div class="watermark">
-        <span class="watermark-icon">✨</span>
-        <span>Made by Arjit Jaiswal</span>
-    </div>
 """, unsafe_allow_html=True)
 
 st.title("🤖 AI Assistant Pro")
@@ -202,6 +167,20 @@ with st.sidebar:
                     if st.button("🗑️", key=f"del_{idx}", help="Delete"):
                         st.session_state.chat_history.pop(idx)
                         st.rerun()
+    
+    st.divider()
+    
+    # Voice Input Feature
+    st.header("🎤 Voice Input")
+    st.caption("Speak to ask questions")
+    
+    col_voice1, col_voice2 = st.columns([2, 1])
+    with col_voice1:
+        if st.button("🎤 Start Recording", use_container_width=True, type="secondary"):
+            st.info("Voice recording coming soon! For now, use text input below.")
+    with col_voice2:
+        if st.button("⏹️ Stop", use_container_width=True):
+            pass
     
     st.divider()
     
